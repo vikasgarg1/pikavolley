@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+body {
+  background-color: #65a1ff;
+  background-image: url('https://img.itch.io/aW1hZ2UvNjg2ODAvMzEyNDkyLnBuZw==/original/fzDMCY.png');
+  background-size: cover;
+}
+
 .container {
   margin: 0 auto;
   max-width: 900px;
@@ -13,7 +19,7 @@
 
 h1 {
   font-family: 'press start 2p';
-  color: rgba(black, .8);
+  color: rgba(255, 255, 255, 0.8);
   text-shadow: -.1em .1em 0 rgba(250, 10, 10, .5), .1em -.1em 0 rgba(10, 10, 250, .5);
 }
 
