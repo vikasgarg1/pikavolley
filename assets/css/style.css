@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 900px;
+  width: 90%;
+  text-align: center;
+}
+
+canvas {
+  border: 1px solid black;
+}
