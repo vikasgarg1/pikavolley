@@ -4,6 +4,7 @@ $(function () {
   var ctx = canvas.getContext('2d')
   var canvasWidth = canvas.width
   var canvasHeight = canvas.height
+  var gutter = 360
 
   // CONSTRUCTOR & PROTOTYPE
   // Main Shape Contructor & Proto
@@ -22,14 +23,21 @@ $(function () {
     Shape.call(this, positionX, positionY, color)
     this.width = 100
     this.height = 100
-    this.step = 60
+    this.step = 30
+    this.edgeLeft = 0
+    this.edgeRight = canvasWidth - this.width
+    this.edgeMiddle = (canvasWidth - gutter) / 2
   }
+
+  // TODO: Find a better solution to check middle collision
   Pikachu.prototype = Object.create(Shape.prototype)
   Pikachu.prototype.constructor = Shape
   Pikachu.prototype.moveLeft = function () {
+    if (this.positionX === this.edgeLeft) return
     this.moveTo(-(this.step), 0)
   }
   Pikachu.prototype.moveRight = function () {
+    if (this.positionX === this.edgeRight) return
     this.moveTo(this.step, 0)
   }
 
@@ -48,7 +56,7 @@ $(function () {
   var pikachu1 = new Pikachu(0, 400, 'red')
   var pikachu2 = new Pikachu(800, 400, 'blue')
   var ball = new Ball(200, 200, 'green')
-  var objects = [pikachu1, pikachu2, ball]
+  var objects = [pikachu1]
 
   // CANVAS DRAWER HELPER FUNCTIONS
   if (canvas.getContext) {
@@ -78,13 +86,13 @@ $(function () {
         ctx.arc(obj.positionX, obj.positionY, obj.radius, obj.startAngle, obj.endAngle)
         ctx.fill()
       } else {
+        // ctx.translate(obj.positionX, obj.positionY)
         ctx.fillRect(obj.positionX, obj.positionY, obj.width, obj.height)
       }
     })
   }
 
   function draw () {
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight)
     ctx.restore()
     drawObject(objects)
     ctx.save()
