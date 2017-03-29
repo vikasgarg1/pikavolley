@@ -54,40 +54,52 @@ $(function () {
     this.startAngle = 0
     this.endAngle = 360
     this.speed = 100
-    this.hitBottom = false
-    this.hitRight = false
-    this.hitTop = false
-    this.hitLeft = false
   }
   Ball.prototype = Object.create(Shape.prototype)
   Ball.prototype.constructor = Shape
 
-  Ball.prototype.checkColission = function () {
-    if (this.positionY >= this.edgeBottom) this.hitBottom = true
-    if (this.positionY <= this.edgeTop) this.hitTop = true
-    if (this.positionX >= this.edgeRight) this.hitRight = true
-    if (this.positionX <= this.edgeLeft) this.hitLeft = true
-  }
-  Ball.prototype.moveTo = function (x, y) {
-    this.checkColission()
-    console.log(this.hitBottom, this.hitRight, this.hitRight, this.hitLeft)
-    if (this.hitBottom && !this.hitRight && !this.hitTop && !this.hitLeft) {
-      this.positionX += x
-      this.positionY -= y
-    } else if (this.hitBottom && this.hitRight && !this.hitTop && !this.hitLeft) {
-      this.positionX -= x
-      this.positionY -= y
-    } else if (this.hitBottom && this.hitRight && this.hitTop && !this.hitLeft) {
-      this.positionX -= x
-      this.positionY += y
-    } else {
-      this.positionX += x
-      this.positionY += y
-    }
+  // Ball.prototype.checkColission = function () {
+  //   if (this.positionY >= this.edgeBottom) this.hitBottom = true
+  //   if (this.positionY <= this.edgeTop) this.hitTop = true
+  //   if (this.positionX >= this.edgeRight) this.hitRight = true
+  //   if (this.positionX <= this.edgeLeft) this.hitLeft = true
+  // }
+
+  // var tx = targetX - x,
+  //       ty = targetY - y,
+  //       dist = Math.sqrt(tx*tx+ty*ty),
+  //       rad = Math.atan2(ty,tx),
+  //       angle = rad/Math.PI * 180;
+  //
+  //       velX = (tx/dist)*speed,
+  //       velY = (ty/dist)*speed;
+  //
+  //       x += velX
+  //       y += velY
+  //
+  //       ctx.clearRect(0,0,500,500);
+  //       ctx.beginPath();
+  //       ctx.arc(x,y,5,0,Math.PI*2);
+  //       ctx.fill();
+
+  Ball.prototype.arcTo = function (x, y) {
+    this.positionX += x
+    this.positionY += y
   }
 
   Ball.prototype.move = function (modifier) {
-    this.moveTo((this.speed * modifier), (this.speed * modifier))
+    var tx = Math.abs((this.speed * modifier) - this.positionX)
+    var ty = Math.abs((this.speed * modifier) - this.positionY)
+    console.log('posX, posY', this.positionX, this.positionY)
+    console.log('tx ty', tx, ty)
+    var dist = Math.sqrt(tx * tx + ty * ty)
+    var velX = (tx / dist) * this.speed * modifier
+    var velY = (ty / dist) * this.speed * modifier
+    this.arcTo(velX, velY)
+  }
+
+  Ball.prototype.hitBottom = function () {
+    return this.positionY >= this.edgeBottom
   }
 
   // INSTANCE OF ALL CONSTRUCTORS
@@ -109,8 +121,9 @@ $(function () {
       ctx.fillStyle = obj.color
       if (obj.hasOwnProperty('radius')) {
         ctx.beginPath()
-        ctx.arc(obj.positionX, obj.positionY, obj.radius, obj.startAngle, obj.endAngle)
+        ctx.arc(obj.positionX, obj.positionY, obj.radius, 0, Math.PI * 2)
         ctx.fill()
+        ctx.closePath()
       } else {
         // ctx.translate(obj.positionX, obj.positionY)
         ctx.fillRect(obj.positionX, obj.positionY, obj.width, obj.height)
@@ -151,25 +164,24 @@ $(function () {
     delete keysDown[e.keyCode]
   })
 
-  $('button')
-  .on('click', function (e) {
-    var now = Date.now()
-    var delta = now - then
-
-    update(delta / 1000)
-    render()
-    then = now
-    window.requestAnimationFrame(main)
-  })
+  function isGameOver () {
+    console.log(ball.positionX, ball.positionY)
+    return ball.hitBottom()
+  }
 
   // main game loop
   function main () {
     var now = Date.now()
     var delta = now - then
 
-    update(delta / 1000)
-    render()
-    then = now
+    if (isGameOver()) {
+      console.log('Game over')
+      return false
+    } else {
+      update(delta / 1000)
+      render()
+      then = now
+    }
     window.requestAnimationFrame(main)
   }
 
