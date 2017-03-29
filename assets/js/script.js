@@ -87,7 +87,7 @@ $(function () {
   }
 
   Ball.prototype.move = function (modifier) {
-    // this.moveTo((this.speed * modifier), (this.speed * modifier))
+    this.moveTo((this.speed * modifier), (this.speed * modifier))
   }
 
   // INSTANCE OF ALL CONSTRUCTORS
@@ -153,7 +153,13 @@ $(function () {
 
   $('button')
   .on('click', function (e) {
+    var now = Date.now()
+    var delta = now - then
 
+    update(delta / 1000)
+    render()
+    then = now
+    window.requestAnimationFrame(main)
   })
 
   // main game loop
