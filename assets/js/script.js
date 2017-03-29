@@ -22,7 +22,6 @@ $(function () {
     this.edgeBottom = canvasHeight - this.height
     this.edgeTop = 0 + this.height
   }
-
   Shape.prototype.moveTo = function (x, y) {
     this.positionX += x
     this.positionY += y
@@ -69,17 +68,16 @@ $(function () {
     if (this.positionX >= this.edgeRight) this.hitRight = true
     if (this.positionX <= this.edgeLeft) this.hitLeft = true
   }
-
   Ball.prototype.moveTo = function (x, y) {
     this.checkColission()
-    console.log(this.hitBottom, this.hitRight, this.hitRight, this.hitLeft);
-    if(this.hitBottom && ! this.hitRight && ! this.hitTop && ! this.hitLeft) {
+    console.log(this.hitBottom, this.hitRight, this.hitRight, this.hitLeft)
+    if (this.hitBottom && !this.hitRight && !this.hitTop && !this.hitLeft) {
       this.positionX += x
       this.positionY -= y
-    } else if(this.hitBottom && this.hitRight && ! this.hitTop && ! this.hitLeft) {
+    } else if (this.hitBottom && this.hitRight && !this.hitTop && !this.hitLeft) {
       this.positionX -= x
       this.positionY -= y
-    } else if(this.hitBottom && this.hitRight && this.hitTop && ! this.hitLeft) {
+    } else if (this.hitBottom && this.hitRight && this.hitTop && !this.hitLeft) {
       this.positionX -= x
       this.positionY += y
     } else {
@@ -89,7 +87,7 @@ $(function () {
   }
 
   Ball.prototype.move = function (modifier) {
-    this.moveTo((this.speed * modifier), (this.speed * modifier))
+    // this.moveTo((this.speed * modifier), (this.speed * modifier))
   }
 
   // INSTANCE OF ALL CONSTRUCTORS
@@ -153,15 +151,19 @@ $(function () {
     delete keysDown[e.keyCode]
   })
 
+  $('button')
+  .on('click', function (e) {
+
+  })
+
   // main game loop
   function main () {
     var now = Date.now()
-  	var delta = now - then
+    var delta = now - then
 
     update(delta / 1000)
-  	render()
-
-  	then = now
+    render()
+    then = now
     window.requestAnimationFrame(main)
   }
 
